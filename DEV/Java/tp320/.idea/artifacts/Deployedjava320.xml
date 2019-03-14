@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Deployedjava320">
+    <output-path>C:/web/tp/tomcat/ROOT</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="tp320/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="tp320" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

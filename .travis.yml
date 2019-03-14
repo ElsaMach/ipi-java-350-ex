@@ -2,7 +2,7 @@ language: java
 
 addons:
   sonarcloud:
-    organization: "elsamach-github" # the key of the org you chose at step #3
+    organization: "elsamach-github"
 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis

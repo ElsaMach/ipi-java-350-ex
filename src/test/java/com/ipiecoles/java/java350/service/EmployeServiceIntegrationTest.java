@@ -29,7 +29,7 @@ public class EmployeServiceIntegrationTest {
     }
 
     @Test
-    public void integrationEmbaucheEmploye(){
+    public void integrationEmbaucheEmploye() throws Exception{
         //Given
         String nom = "Hen";
         String prenom = "Tai";

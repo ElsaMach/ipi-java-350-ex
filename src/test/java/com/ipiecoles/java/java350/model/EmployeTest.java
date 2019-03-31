@@ -1,11 +1,14 @@
 package com.ipiecoles.java.java350.model;
 
+import com.ipiecoles.java.java350.exception.EmployeException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDate;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class EmployeTest {
 
@@ -83,6 +86,95 @@ public class EmployeTest {
         //Then
         Assertions.assertEquals(primeAnnuelle, prime);
 
+    }
+
+
+    @Test
+    public void augmenterSalaireAZero() {
+        //Given
+        Double augmentation = 1.10D;
+        Employe employe = new Employe();
+
+        //When
+        Double salaire = 0.00D;
+
+        //Then
+        employe.setSalaire(salaire);
+    }
+
+
+    @Test
+    public void augmenterSalaireTauxZero() {
+        //Given
+        Double augmentation = 0.00D;
+        Employe employe = new Employe();
+
+        //When
+        Double salaire = 1500.00D;
+
+        //Then
+        employe.setSalaire(salaire);
+    }
+
+    @Test
+    public void augmenterSalaireTauxNegatif() {
+        //Given
+        Double augmentation = -0.50D;
+        Employe employe = new Employe();
+
+        //When
+        Double salaire = 1500.00D;
+
+        //Then
+        employe.setSalaire(salaire);
+
+    }
+
+    @Test
+
+    public void augmenterSalaireTauxPositif() throws EmployeException {
+        //Given
+        Double augmentation = 0.10;
+        Employe employe = new Employe();
+
+        Double salaire = 1500.00D;
+        employe.setSalaire(salaire);
+
+        //When
+        employe.augmenterSalaire(augmentation);
+
+        //Then
+        assertThat(employe.getSalaire()).isEqualTo(salaire * (1.00D + augmentation));
+    }
+
+
+
+    @ParameterizedTest()
+    @CsvSource({
+            "2019-08-06, 8",
+            "2021-10-21, 10",
+            "2021-10-09, 10",
+            "2032-08-25, 11",
+    })
+
+    void testGetNbRtt(LocalDate date, Integer nbRtt){
+
+        //Given
+        Employe employe = new Employe("Doe",
+                                "John",
+                                "M12345",
+                                LocalDate.now().minusYears(1),
+                                Entreprise.SALAIRE_BASE,
+                                Entreprise.PERFORMANCE_BASE,
+                                1.0);
+
+        Integer nbRttEmploye;
+
+        //When
+        nbRttEmploye = employe.getNbRtt(date);
+
+        //then
+        Assertions.assertEquals(nbRtt, nbRttEmploye);
     }
 
 }

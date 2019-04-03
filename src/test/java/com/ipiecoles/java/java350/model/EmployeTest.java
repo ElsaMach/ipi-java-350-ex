@@ -160,6 +160,7 @@ public class EmployeTest {
     void testGetNbRtt(LocalDate date, Integer nbRtt){
 
         //Given
+        //Fonctionne sans l'employe détaillé
         Employe employe = new Employe("Doe",
                                 "John",
                                 "M12345",

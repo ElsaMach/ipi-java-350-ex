@@ -82,18 +82,18 @@ public class Employe {
         switch (LocalDate.of(date.getYear(), 1,1).getDayOfWeek()){
             case THURSDAY:
                 if(date.isLeapYear())
-                    joursWeekend += 1;
+                    joursWeekend += 0;
                 break;
 
             case FRIDAY:
                 if(date.isLeapYear())
                     joursWeekend += 2;
                 else
-                    joursWeekend += 1;
+                    joursWeekend += 0;
                 break;
 
             case SATURDAY:
-                joursWeekend += 1;
+                joursWeekend +=1;
                 break;
         }
 

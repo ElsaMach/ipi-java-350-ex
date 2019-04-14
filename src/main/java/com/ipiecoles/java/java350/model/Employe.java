@@ -1,11 +1,14 @@
 package com.ipiecoles.java.java350.model;
 
+import com.ipiecoles.java.java350.exception.EmployeException;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Objects;
 
 @Entity
@@ -70,20 +73,44 @@ public class Employe {
      *
      * @return le nombre de jours de RTT
      */
-    public Integer getNbRtt(){
-        return getNbRtt(LocalDate.now());
-    }
 
-    public Integer getNbRtt(LocalDate d){
-        int i1 = d.isLeapYear() ? 365 : 366;
-        int var = 104;
-        switch (LocalDate.of(d.getYear(),1,1).getDayOfWeek()){
-            case THURSDAY: if(d.isLeapYear()) var =  var + 1; break;
-            case FRIDAY: if(d.isLeapYear()) var =  var + 2; else var =  var + 1;
-            case SATURDAY: var = var + 1; break;
+    public Integer getNbRtt(LocalDate date){
+        //Verificationdu nombre de jours dans l'année (bissextile ou pas)
+        int joursAn = date.isLeapYear() ? 366 : 365;
+        int joursWeekend = 104;
+
+        //Vérification du premier jour de l'année
+        switch (LocalDate.of(date.getYear(), 1,1).getDayOfWeek()){
+            case THURSDAY:
+                if(date.isLeapYear())
+                    joursWeekend += 0;
+                break;
+
+            case FRIDAY:
+                if(date.isLeapYear())
+                    joursWeekend += 2;
+                else
+                    joursWeekend += 0;
+                break;
+
+            case SATURDAY:
+                joursWeekend +=1;
+                break;
         }
-        int monInt = (int) Entreprise.joursFeries(d).stream().filter(localDate -> localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
-        return (int) Math.ceil((i1 - Entreprise.NB_JOURS_MAX_FORFAIT - var - Entreprise.NB_CONGES_BASE - monInt) * tempsPartiel);
+
+        //Vérification des jours ouvrés fériés
+        int nbJoursOuvresFeries = (int) Entreprise
+                .joursFeries(date)
+                .stream()
+                .filter(localDate -> localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue())
+                .count();
+
+        //Retourne le nombre de RTT de l'employe
+        return (int)
+                Math.ceil((joursAn - Entreprise.NB_JOURS_MAX_FORFAIT
+                                   - joursWeekend
+                                   - Entreprise.NB_CONGES_BASE
+                                   - nbJoursOuvresFeries) * tempsPartiel);
     }
 
     /**
@@ -121,7 +148,20 @@ public class Employe {
     }
 
     //Augmenter salaire
-    //public void augmenterSalaire(double pourcentage){}
+    public void augmenterSalaire(double pourcentage)throws EmployeException {
+
+        //Salaire invalide
+        if (this.getSalaire() == null || this.getSalaire() <= 0.00d){
+            throw new EmployeException("Le salaire n'est pas suffisant.");
+
+            //Taux invalide
+        } else if (pourcentage <= 0.00d){
+            throw new EmployeException("Le taux n'est pas suffisant.");
+
+        } else {
+            this.setSalaire(this.getSalaire() * (1 + pourcentage));
+        }
+    }
 
     public Long getId() {
         return id;

@@ -79,6 +79,7 @@ public class Employe {
         int joursAn = date.isLeapYear() ? 366 : 365;
         int joursWeekend = 104;
 
+        //Vérification du premier jour de l'année
         switch (LocalDate.of(date.getYear(), 1,1).getDayOfWeek()){
             case THURSDAY:
                 if(date.isLeapYear())
@@ -97,6 +98,7 @@ public class Employe {
                 break;
         }
 
+        //Vérification des jours ouvrés fériés
         int nbJoursOuvresFeries = (int) Entreprise
                 .joursFeries(date)
                 .stream()
